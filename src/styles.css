@@ -486,6 +486,7 @@ button.primary {
   width: 100%;
   max-width: 100%;
   min-width: 0;
+  min-height: 2.65rem;
 }
 .baby-actions {
   display: grid;
@@ -528,6 +529,7 @@ button.primary {
   width: 100%;
   max-width: 100%;
   min-width: 0;
+  min-height: 2.65rem;
 }
 .add-baby button { grid-column: 1 / -1; }
 @media (min-width: 540px) {
@@ -541,6 +543,23 @@ button.primary {
   .add-baby input[type='date'] {
     width: -webkit-fill-available;
     max-width: -webkit-fill-available;
+    /* Keep native iOS date text vertically centered in the field. */
+    min-height: 2.7rem;
+    padding-top: 0;
+    padding-bottom: 0;
+    line-height: 2.7rem;
+  }
+
+  .baby-fields input[type='date']::-webkit-date-and-time-value,
+  .add-baby input[type='date']::-webkit-date-and-time-value {
+    line-height: 2.7rem;
+  }
+
+  .baby-fields input[type='date']::-webkit-datetime-edit,
+  .add-baby input[type='date']::-webkit-datetime-edit {
+    line-height: 2.7rem;
+    padding-top: 0;
+    padding-bottom: 0;
   }
 }
 
