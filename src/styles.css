@@ -483,9 +483,15 @@ button.primary {
   border-radius: 8px;
   border: 1px solid var(--border);
   background: var(--surface);
+  color: var(--text);
+}
+.baby-row button.primary {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+  color: #fff;
 }
 .baby-row .danger { color: var(--danger); }
-.baby-row button:disabled { opacity: 0.5; cursor: default; }
+.baby-row button:disabled { opacity: 0.7; cursor: default; }
 
 .add-baby {
   display: grid;
