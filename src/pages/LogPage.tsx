@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { EventForm, type EventFormInitial } from '../components/EventForm';
+import { BreastFeedingPanel } from '../components/BreastFeedingPanel';
 import { useToast } from '../components/Toast';
 import { useStore } from '../store';
 
@@ -29,18 +30,6 @@ export function LogPage() {
   const now = () => new Date().toISOString();
 
   const tiles: Tile[] = [
-    {
-      label: 'Breast L',
-      emoji: '🤱',
-      className: 'tile-feed',
-      instant: quick('Breast (left)', { type: 'feed', feedKind: 'breast', side: 'left', startTime: now() })
-    },
-    {
-      label: 'Breast R',
-      emoji: '🤱',
-      className: 'tile-feed',
-      instant: quick('Breast (right)', { type: 'feed', feedKind: 'breast', side: 'right', startTime: now() })
-    },
     {
       label: 'Pumped',
       emoji: '🍼',
@@ -81,6 +70,7 @@ export function LogPage() {
 
   return (
     <section className="page log-page">
+      <BreastFeedingPanel />
       <div className="tile-grid">
         {tiles.map((t) => (
           <button

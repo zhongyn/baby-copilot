@@ -98,7 +98,7 @@ textarea { resize: vertical; }
 }
 
 @media (min-width: 540px) {
-  .tile-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .tile-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 .tile {
@@ -123,6 +123,68 @@ textarea { resize: vertical; }
 .tile-feed { background: var(--feed); }
 .tile-diaper { background: var(--diaper); }
 .tile-sleep { background: var(--sleep); }
+
+/* Breast feeding panel */
+.breast-panel {
+  background: var(--feed);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+.breast-panel.running { background: #ffe4ec; box-shadow: 0 0 0 3px rgba(224,122,147,0.15); }
+.breast-panel-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+.breast-panel-icon { font-size: 1.4rem; }
+.breast-panel-title { font-size: 1rem; }
+.breast-timer {
+  font-variant-numeric: tabular-nums;
+  font-size: 2.6rem;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.04em;
+  padding: 0.4rem 0;
+  color: var(--accent-strong);
+}
+.breast-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+.breast-actions button {
+  flex: 1;
+  padding: 0.7rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+.breast-actions .primary {
+  background: var(--accent-strong);
+  color: #fff;
+  border-color: var(--accent-strong);
+}
+.breast-start {
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--accent-strong);
+  background: var(--accent-strong);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+}
+.preset-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+.preset-label { color: var(--muted); font-size: 0.85rem; margin-right: 0.25rem; }
 
 /* Filters */
 .filter-row {

@@ -72,9 +72,12 @@ export function EventForm({ initial, onClose }: Props) {
   const [volume, setVolume] = useState<string>(() => {
     if (baseEvent?.type === 'feed' && baseEvent.feedKind !== 'breast') {
       const v = mlToDisplay(baseEvent.volumeMl, unit);
-      return unit === 'ml' ? String(Math.round(v)) : v.toFixed(2);
+      // Snap to nearest available step so the dropdown can pre-select it.
+      if (unit === 'ml') return String(Math.max(10, Math.min(300, Math.round(v / 10) * 10)));
+      return String(Math.max(1, Math.min(12, Math.round(v))));
     }
-    return '';
+    // Sensible defaults for create
+    return unit === 'ml' ? '60' : '2';
   });
   const [diaperKind, setDiaperKind] = useState<DiaperKind>(initialDiaperKind);
   const [notes, setNotes] = useState(baseEvent?.notes ?? '');
@@ -202,15 +205,16 @@ export function EventForm({ initial, onClose }: Props) {
             ) : (
               <label className="field">
                 <span>Volume ({unit})</span>
-                <input
-                  type="number"
-                  inputMode="decimal"
-                  min={0}
-                  step={unit === 'ml' ? 1 : 0.1}
-                  value={volume}
-                  onChange={(e) => setVolume(e.target.value)}
-                  autoFocus
-                />
+                <select value={volume} onChange={(e) => setVolume(e.target.value)} autoFocus>
+                  {(unit === 'ml'
+                    ? Array.from({ length: 30 }, (_, i) => (i + 1) * 10)
+                    : Array.from({ length: 12 }, (_, i) => i + 1)
+                  ).map((v) => (
+                    <option key={v} value={String(v)}>
+                      {v} {unit}
+                    </option>
+                  ))}
+                </select>
               </label>
             )}
           </>

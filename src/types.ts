@@ -54,9 +54,16 @@ export type Settings = {
   displayUnit: DisplayUnit;
 };
 
+export type ActiveBreastTimer = {
+  babyId: ID;
+  side: BreastSide;
+  startTime: string; // ISO
+};
+
 export type Snapshot = {
   schemaVersion: number;
   babies: Baby[];
   events: AppEvent[];
   settings: Settings;
+  activeBreastTimer: ActiveBreastTimer | null;
 };

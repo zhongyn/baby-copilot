@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { v4 as uuid } from 'uuid';
-import type { AppEvent, Baby, DisplayUnit, ID, Snapshot } from './types';
+import type { AppEvent, Baby, BreastSide, DisplayUnit, FeedEvent, ID, Snapshot } from './types';
 import { loadSnapshot, saveSnapshot } from './storage/localStore';
 
 type DistributiveOmit<T, K extends keyof any> = T extends any ? Omit<T, K> : never;
@@ -21,6 +21,12 @@ type State = Snapshot & {
   addEvent: (e: NewEventInput) => AppEvent | null;
   updateEvent: (id: ID, patch: Partial<AppEvent>) => void;
   deleteEvent: (id: ID) => void;
+
+  // breast feeding timer
+  startBreastTimer: (side: BreastSide) => void;
+  stopBreastTimer: () => FeedEvent | null;
+  cancelBreastTimer: () => void;
+  logBreastPreset: (side: BreastSide, minutes: number) => FeedEvent | null;
 
   // settings
   setUnit: (u: DisplayUnit) => void;
@@ -125,5 +131,67 @@ export const useStore = create<State>((set, get) => ({
       const settings = { ...s.settings, displayUnit: u };
       saveSnapshot({ ...s, settings });
       return { settings };
-    })
+    }),
+
+  startBreastTimer: (side) => {
+    const state = get();
+    const babyId = state.settings.activeBabyId;
+    if (!babyId || state.activeBreastTimer) return;
+    const timer = { babyId, side, startTime: new Date().toISOString() };
+    set((s) => {
+      saveSnapshot({ ...s, activeBreastTimer: timer });
+      return { activeBreastTimer: timer };
+    });
+  },
+
+  stopBreastTimer: () => {
+    const state = get();
+    const t = state.activeBreastTimer;
+    if (!t) return null;
+    const elapsedMs = Date.now() - new Date(t.startTime).getTime();
+    const durationMin = Math.max(1, Math.round(elapsedMs / 60000));
+    const event: FeedEvent = {
+      id: uuid(),
+      babyId: t.babyId,
+      type: 'feed',
+      feedKind: 'breast',
+      side: t.side,
+      durationMin,
+      startTime: t.startTime
+    };
+    set((s) => {
+      const events = [...s.events, event];
+      saveSnapshot({ ...s, events, activeBreastTimer: null });
+      return { events, activeBreastTimer: null };
+    });
+    return event;
+  },
+
+  cancelBreastTimer: () =>
+    set((s) => {
+      saveSnapshot({ ...s, activeBreastTimer: null });
+      return { activeBreastTimer: null };
+    }),
+
+  logBreastPreset: (side, minutes) => {
+    const state = get();
+    const babyId = state.settings.activeBabyId;
+    if (!babyId) return null;
+    const startTime = new Date(Date.now() - minutes * 60000).toISOString();
+    const event: FeedEvent = {
+      id: uuid(),
+      babyId,
+      type: 'feed',
+      feedKind: 'breast',
+      side,
+      durationMin: minutes,
+      startTime
+    };
+    set((s) => {
+      const events = [...s.events, event];
+      saveSnapshot({ ...s, events });
+      return { events };
+    });
+    return event;
+  }
 }));
