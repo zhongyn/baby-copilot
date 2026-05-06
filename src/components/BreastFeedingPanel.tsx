@@ -103,19 +103,9 @@ function notify(title: string, body: string) {
 function ensureNotificationPermission() {
   try {
     if (typeof Notification === 'undefined') return;
-    if (Notification.permission !== 'default') return;
-    // On iOS, the bare `new Notification(...)` constructor doesn't actually
-    // deliver banners (only ServiceWorkerRegistration.showNotification does,
-    // and only when wired up to Web Push). Skip the prompt there so we don't
-    // ask for a permission we can't honor — the in-app visual + audio
-    // reminder still fires.
-    const ua = navigator.userAgent || '';
-    const isIOS = /iPad|iPhone|iPod/.test(ua) || (ua.includes('Mac') && 'ontouchend' in document);
-    const isStandalone =
-      window.matchMedia('(display-mode: standalone)').matches ||
-      (navigator as unknown as { standalone?: boolean }).standalone === true;
-    if (isIOS && isStandalone) return;
-    Notification.requestPermission().catch(() => {});
+    if (Notification.permission === 'default') {
+      Notification.requestPermission().catch(() => {});
+    }
   } catch {
     /* ignore */
   }
