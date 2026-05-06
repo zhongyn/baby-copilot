@@ -169,6 +169,27 @@ textarea { resize: vertical; }
   padding: 0.4rem 0;
   color: var(--accent-strong);
 }
+.breast-target-row {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.95rem;
+  color: var(--muted);
+  margin-top: -0.25rem;
+  margin-bottom: 0.25rem;
+}
+.breast-target-reached {
+  color: #b00020;
+  font-weight: 600;
+}
+:root[data-theme='dark'] .breast-target-reached { color: #ff8a99; }
+.breast-panel.reached {
+  border-color: #b00020;
+  animation: breast-pulse 1.2s ease-in-out infinite;
+}
+@keyframes breast-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(176, 0, 32, 0.0); }
+  50% { box-shadow: 0 0 0 6px rgba(176, 0, 32, 0.18); }
+}
 .breast-actions {
   display: flex;
   gap: 0.5rem;

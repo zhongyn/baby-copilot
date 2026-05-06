@@ -23,7 +23,7 @@ type State = Snapshot & {
   deleteEvent: (id: ID) => void;
 
   // breast feeding timer
-  startBreastTimer: (side: BreastSide) => void;
+  startBreastTimer: (side: BreastSide, targetMin?: number) => void;
   stopBreastTimer: () => FeedEvent | null;
   cancelBreastTimer: () => void;
   logBreastPreset: (side: BreastSide, minutes: number) => FeedEvent | null;
@@ -141,11 +141,16 @@ export const useStore = create<State>((set, get) => ({
       return { settings };
     }),
 
-  startBreastTimer: (side) => {
+  startBreastTimer: (side, targetMin) => {
     const state = get();
     const babyId = state.settings.activeBabyId;
     if (!babyId || state.activeBreastTimer) return;
-    const timer = { babyId, side, startTime: new Date().toISOString() };
+    const timer = {
+      babyId,
+      side,
+      startTime: new Date().toISOString(),
+      ...(targetMin ? { targetMin } : {})
+    };
     set((s) => {
       saveSnapshot({ ...s, activeBreastTimer: timer });
       return { activeBreastTimer: timer };

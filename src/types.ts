@@ -61,6 +61,7 @@ export type ActiveBreastTimer = {
   babyId: ID;
   side: BreastSide;
   startTime: string; // ISO
+  targetMin?: number;
 };
 
 export type Snapshot = {
