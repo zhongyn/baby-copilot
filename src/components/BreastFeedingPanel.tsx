@@ -92,38 +92,9 @@ function beep() {
 function notify(title: string, body: string) {
   try {
     if (typeof Notification === 'undefined') return;
-    if (Notification.permission !== 'granted') return;
-    // Prefer ServiceWorkerRegistration.showNotification — required on iOS PWA
-    // and on Android Chrome (where `new Notification(...)` throws / is blocked).
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.ready
-        .then((reg) => {
-          try {
-            reg.showNotification(title, {
-              body,
-              tag: 'baby-copilot-feed',
-              requireInteraction: true,
-              icon: 'icon-192.png',
-              badge: 'icon-192.png'
-            } as NotificationOptions);
-          } catch {
-            try {
-              new Notification(title, { body, tag: 'baby-copilot-feed' });
-            } catch {
-              /* ignore */
-            }
-          }
-        })
-        .catch(() => {
-          try {
-            new Notification(title, { body, tag: 'baby-copilot-feed' });
-          } catch {
-            /* ignore */
-          }
-        });
-      return;
+    if (Notification.permission === 'granted') {
+      new Notification(title, { body, tag: 'baby-copilot-feed' });
     }
-    new Notification(title, { body, tag: 'baby-copilot-feed' });
   } catch {
     /* ignore */
   }
