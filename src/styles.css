@@ -467,15 +467,17 @@ button.primary {
 .baby-list { list-style: none; padding: 0; margin: 0 0 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
 .baby-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 0.4rem;
   align-items: center;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 0.5rem;
+  padding: 0.6rem 0.7rem;
+  overflow: hidden;
 }
-.baby-row > * { min-width: 0; }
+.baby-row > * { min-width: 0; max-width: 100%; }
+.baby-row input { width: 100%; }
 @media (min-width: 540px) {
   .baby-row { grid-template-columns: 1.2fr 1fr auto auto; }
 }
@@ -496,10 +498,16 @@ button.primary {
 
 .add-baby {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 0.4rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.6rem 0.7rem;
+  overflow: hidden;
 }
-.add-baby > * { min-width: 0; }
+.add-baby > * { min-width: 0; max-width: 100%; }
+.add-baby input { width: 100%; }
 .add-baby button { grid-column: 1 / -1; }
 @media (min-width: 540px) {
   .add-baby { grid-template-columns: 1.2fr 1fr auto; }
