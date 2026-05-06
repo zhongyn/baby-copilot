@@ -478,14 +478,17 @@ button.primary {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 0.4rem;
+  width: 100%;
 }
 .baby-fields > * { min-width: 0; }
 .baby-fields input { width: 100%; }
 .baby-actions {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 0.4rem;
+  width: 100%;
 }
+.baby-actions > button { min-width: 0; width: 100%; }
 @media (min-width: 540px) {
   .baby-row { flex-direction: row; align-items: center; }
   .baby-fields { flex: 1 1 auto; grid-template-columns: 1.4fr 1fr; }
