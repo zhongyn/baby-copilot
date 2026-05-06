@@ -18,33 +18,37 @@ export function BabiesPage() {
       <ul className="baby-list">
         {babies.map((b) => (
           <li key={b.id} className="baby-row">
-            <input
-              value={b.name}
-              onChange={(e) => updateBaby(b.id, { name: e.target.value })}
-            />
-            <input
-              type="date"
-              value={b.birthDate ?? ''}
-              onChange={(e) => updateBaby(b.id, { birthDate: e.target.value || undefined })}
-            />
-            <button
-              type="button"
-              className={activeId === b.id ? 'primary' : ''}
-              onClick={() => setActiveBaby(b.id)}
-              disabled={activeId === b.id}
-            >
-              {activeId === b.id ? 'Active' : 'Set active'}
-            </button>
-            <button
-              type="button"
-              className="danger"
-              disabled={babies.length <= 1}
-              onClick={() => {
-                if (confirm(`Delete ${b.name} and all their events?`)) deleteBaby(b.id);
-              }}
-            >
-              Delete
-            </button>
+            <div className="baby-fields">
+              <input
+                value={b.name}
+                onChange={(e) => updateBaby(b.id, { name: e.target.value })}
+              />
+              <input
+                type="date"
+                value={b.birthDate ?? ''}
+                onChange={(e) => updateBaby(b.id, { birthDate: e.target.value || undefined })}
+              />
+            </div>
+            <div className="baby-actions">
+              <button
+                type="button"
+                className={activeId === b.id ? 'primary' : ''}
+                onClick={() => setActiveBaby(b.id)}
+                disabled={activeId === b.id}
+              >
+                {activeId === b.id ? 'Active' : 'Set active'}
+              </button>
+              <button
+                type="button"
+                className="danger"
+                disabled={babies.length <= 1}
+                onClick={() => {
+                  if (confirm(`Delete ${b.name} and all their events?`)) deleteBaby(b.id);
+                }}
+              >
+                Delete
+              </button>
+            </div>
           </li>
         ))}
       </ul>
