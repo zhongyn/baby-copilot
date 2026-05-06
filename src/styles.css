@@ -52,8 +52,8 @@ input, select, textarea {
   width: 100%;
 }
 
-/* Keep native date controls inside their container across browsers. */
-input[type='date'] {
+/* Keep native date/datetime controls inside their container across browsers. */
+input:is([type='date'], [type='datetime-local']) {
   display: block;
   width: 100%;
   max-width: 100%;
@@ -534,7 +534,7 @@ button.primary {
 
 /* iOS Safari date inputs can render wider than 100%; use fill-available there. */
 @supports (-webkit-touch-callout: none) {
-  input[type='date'] {
+  input:is([type='date'], [type='datetime-local']) {
     width: -webkit-fill-available;
     max-width: -webkit-fill-available;
     /* Keep native iOS date text vertically centered in the field. */
@@ -548,17 +548,17 @@ button.primary {
     line-height: 2.7rem;
   }
 
-  input[type='date']::-webkit-datetime-edit-fields-wrapper {
+  input:is([type='date'], [type='datetime-local'])::-webkit-datetime-edit-fields-wrapper {
     padding: 0;
   }
 
-  input[type='date']::-webkit-date-and-time-value {
+  input:is([type='date'], [type='datetime-local'])::-webkit-date-and-time-value {
     line-height: 2.7rem;
     padding: 0;
     margin: 0;
   }
 
-  input[type='date']::-webkit-datetime-edit {
+  input:is([type='date'], [type='datetime-local'])::-webkit-datetime-edit {
     line-height: 2.7rem;
     padding-left: 0;
     padding-right: 0;
@@ -566,7 +566,7 @@ button.primary {
     padding-bottom: 0;
   }
 
-  input[type='date']::-webkit-calendar-picker-indicator {
+  input:is([type='date'], [type='datetime-local'])::-webkit-calendar-picker-indicator {
     margin: 0;
     padding: 0;
     width: 1.1em;
