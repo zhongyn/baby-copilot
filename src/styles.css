@@ -489,7 +489,11 @@ button.primary {
   gap: 0.4rem;
 }
 .baby-fields > * { min-width: 0; }
-.baby-fields input { width: 100%; }
+.baby-fields input {
+  width: 100%;
+  min-height: 2.65rem;
+  border-radius: 10px;
+}
 .baby-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -529,7 +533,11 @@ button.primary {
   padding: 0.7rem 0.9rem;
 }
 .add-baby > * { min-width: 0; }
-.add-baby input { width: 100%; }
+.add-baby input {
+  width: 100%;
+  min-height: 2.65rem;
+  border-radius: 10px;
+}
 .add-baby button { grid-column: 1 / -1; }
 .add-baby button {
   min-height: 2.65rem;
@@ -546,6 +554,18 @@ button.primary {
 
 /* iOS Safari date inputs can render wider than 100%; use fill-available there. */
 @supports (-webkit-touch-callout: none) {
+  .baby-fields input:not([type='date']):not([type='datetime-local']),
+  .add-baby input:not([type='date']):not([type='datetime-local']) {
+    min-height: 2.7rem;
+    height: 2.7rem;
+    line-height: 2.7rem;
+  }
+
+  .add-baby button {
+    min-height: 2.7rem;
+    height: 2.7rem;
+  }
+
   input:is([type='date'], [type='datetime-local']) {
     width: -webkit-fill-available;
     max-width: -webkit-fill-available;
