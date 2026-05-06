@@ -502,10 +502,14 @@ button.primary {
 }
 .baby-row button {
   padding: 0.55rem 0.7rem;
-  border-radius: 8px;
+  min-height: 2.65rem;
+  border-radius: 10px;
   border: 1px solid var(--border);
   background: var(--surface);
   color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 .baby-row button.primary {
   background: var(--accent-strong);
@@ -527,6 +531,14 @@ button.primary {
 .add-baby > * { min-width: 0; }
 .add-baby input { width: 100%; }
 .add-baby button { grid-column: 1 / -1; }
+.add-baby button {
+  min-height: 2.65rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
 @media (min-width: 540px) {
   .add-baby { grid-template-columns: 1.2fr 1fr auto; }
   .add-baby button { grid-column: auto; }
