@@ -224,8 +224,18 @@ textarea { resize: vertical; }
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
-.breast-side .preset-row { justify-content: center; }
-.breast-side .chip { flex: 1; min-width: 0; padding: 0.35rem 0.4rem; text-align: center; }
+.breast-side .preset-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem;
+  justify-content: stretch;
+}
+.breast-side .chip {
+  padding: 0.4rem 0.3rem;
+  text-align: center;
+  font-size: 0.85rem;
+  min-width: 0;
+}
 
 /* Filters */
 .filter-row {
