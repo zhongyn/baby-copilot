@@ -478,17 +478,20 @@ button.primary {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 0.4rem;
-  width: 100%;
 }
 .baby-fields > * { min-width: 0; }
 .baby-fields input { width: 100%; }
+.baby-fields input[type='date'] {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
 .baby-actions {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: 1fr 1fr;
   gap: 0.4rem;
-  width: 100%;
 }
-.baby-actions > button { min-width: 0; width: 100%; }
 @media (min-width: 540px) {
   .baby-row { flex-direction: row; align-items: center; }
   .baby-fields { flex: 1 1 auto; grid-template-columns: 1.4fr 1fr; }
@@ -520,10 +523,25 @@ button.primary {
 }
 .add-baby > * { min-width: 0; }
 .add-baby input { width: 100%; }
+.add-baby input[type='date'] {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
 .add-baby button { grid-column: 1 / -1; }
 @media (min-width: 540px) {
   .add-baby { grid-template-columns: 1.2fr 1fr auto; }
   .add-baby button { grid-column: auto; }
+}
+
+/* iOS Safari date inputs can render wider than 100%; use fill-available there. */
+@supports (-webkit-touch-callout: none) {
+  .baby-fields input[type='date'],
+  .add-baby input[type='date'] {
+    width: -webkit-fill-available;
+    max-width: -webkit-fill-available;
+  }
 }
 
 .hint { color: var(--muted); font-size: 0.85rem; }
