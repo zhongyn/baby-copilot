@@ -206,6 +206,14 @@ textarea { resize: vertical; }
   color: #fff;
   border-color: var(--accent-strong);
 }
+.breast-actions .breast-test {
+  flex: 0 0 auto;
+  padding: 0.7rem 0.8rem;
+  font-size: 0.9rem;
+  background: transparent;
+  color: var(--muted);
+  border-style: dashed;
+}
 .breast-start {
   padding: 0.85rem 1rem;
   border-radius: 12px;

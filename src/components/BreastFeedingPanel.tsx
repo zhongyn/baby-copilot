@@ -203,6 +203,18 @@ export function BreastFeedingPanel() {
           >
             Cancel
           </button>
+          <button
+            type="button"
+            className="breast-test"
+            title="Fire the reminder now (test)"
+            onClick={() => {
+              beep();
+              notify('Test reminder', `${sideLabel} breast · test`);
+              toast.show(`🔔 Test reminder · ${sideLabel}`);
+            }}
+          >
+            🔔 Test
+          </button>
         </div>
       </section>
     );
