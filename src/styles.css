@@ -202,6 +202,31 @@ textarea { resize: vertical; }
 }
 .preset-label { color: var(--muted); font-size: 0.85rem; margin-right: 0.25rem; }
 
+.breast-sides {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+.breast-side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.65rem;
+}
+.breast-side-label {
+  font-weight: 600;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.breast-side .preset-row { justify-content: center; }
+.breast-side .chip { flex: 1; min-width: 0; padding: 0.35rem 0.4rem; text-align: center; }
+
 /* Filters */
 .filter-row {
   display: flex;

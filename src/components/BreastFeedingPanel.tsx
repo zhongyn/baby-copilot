@@ -3,7 +3,7 @@ import { useStore } from '../store';
 import { useToast } from './Toast';
 import type { BreastSide } from '../types';
 
-const SIDES: BreastSide[] = ['left', 'right', 'both'];
+const SIDES: Exclude<BreastSide, 'both'>[] = ['left', 'right'];
 const PRESETS = [5, 10, 15, 20];
 
 function formatElapsed(ms: number): string {
@@ -24,7 +24,6 @@ export function BreastFeedingPanel() {
   const deleteEvent = useStore((s) => s.deleteEvent);
   const toast = useToast();
 
-  const [side, setSide] = useState<BreastSide>('left');
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
@@ -75,39 +74,37 @@ export function BreastFeedingPanel() {
         <span className="breast-panel-icon">🤱</span>
         <span className="breast-panel-title">Breast feeding</span>
       </div>
-      <label className="field">
-        <span>Side</span>
-        <div className="seg">
-          {SIDES.map((s) => (
-            <button
-              key={s}
-              type="button"
-              className={side === s ? 'on' : ''}
-              onClick={() => setSide(s)}
-            >
-              {s}
-            </button>
-          ))}
-        </div>
-      </label>
-      <button type="button" className="primary breast-start" onClick={() => start(side)}>
-        ▶ Start timer
-      </button>
-      <div className="preset-row">
-        <span className="preset-label">Quick log:</span>
-        {PRESETS.map((m) => (
-          <button
-            key={m}
-            type="button"
-            className="chip"
-            onClick={() => {
-              const e = preset(side, m);
-              if (e) toast.show(`Logged ${m} min`, () => deleteEvent(e.id));
-            }}
-          >
-            {m} min
-          </button>
-        ))}
+      <div className="breast-sides">
+        {SIDES.map((s) => {
+          const label = s === 'left' ? 'Left' : 'Right';
+          return (
+            <div key={s} className="breast-side">
+              <div className="breast-side-label">{label}</div>
+              <button
+                type="button"
+                className="primary breast-start"
+                onClick={() => start(s)}
+              >
+                ▶ Start
+              </button>
+              <div className="preset-row">
+                {PRESETS.map((m) => (
+                  <button
+                    key={m}
+                    type="button"
+                    className="chip"
+                    onClick={() => {
+                      const e = preset(s, m);
+                      if (e) toast.show(`${label} · ${m} min logged`, () => deleteEvent(e.id));
+                    }}
+                  >
+                    {m}m
+                  </button>
+                ))}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </section>
   );
