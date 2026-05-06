@@ -7,7 +7,7 @@ const empty: Snapshot = {
   schemaVersion: SCHEMA_VERSION,
   babies: [],
   events: [],
-  settings: { activeBabyId: null, displayUnit: 'ml' },
+  settings: { activeBabyId: null, displayUnit: 'ml', theme: 'system' },
   activeBreastTimer: null
 };
 

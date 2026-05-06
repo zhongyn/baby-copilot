@@ -10,6 +10,22 @@
   --diaper: #fff1c5;
   --sleep: #d8d4f0;
   --danger: #c0392b;
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --bg: #18121a;
+  --surface: #221a25;
+  --border: #3a2c33;
+  --text: #f3e7eb;
+  --muted: #ad9aa3;
+  --accent: #d97a93;
+  --accent-strong: #f5a3b6;
+  --feed: #3a232c;
+  --diaper: #3a3320;
+  --sleep: #2a2740;
+  --danger: #ff6b5e;
+  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
@@ -135,7 +151,7 @@ textarea { resize: vertical; }
   flex-direction: column;
   gap: 0.65rem;
 }
-.breast-panel.running { background: #ffe4ec; box-shadow: 0 0 0 3px rgba(224,122,147,0.15); }
+.breast-panel.running { background: var(--feed); box-shadow: 0 0 0 3px rgba(224,122,147,0.15); }
 .breast-panel-head {
   display: flex;
   align-items: center;

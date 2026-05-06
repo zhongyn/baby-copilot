@@ -49,9 +49,12 @@ export type AppEvent = FeedEvent | DiaperEvent | SleepEvent;
 
 export type DisplayUnit = 'ml' | 'oz';
 
+export type ThemePreference = 'system' | 'light' | 'dark';
+
 export type Settings = {
   activeBabyId: ID | null;
   displayUnit: DisplayUnit;
+  theme: ThemePreference;
 };
 
 export type ActiveBreastTimer = {

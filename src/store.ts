@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { v4 as uuid } from 'uuid';
-import type { AppEvent, Baby, BreastSide, DisplayUnit, FeedEvent, ID, Snapshot } from './types';
+import type { AppEvent, Baby, BreastSide, DisplayUnit, FeedEvent, ID, Snapshot, ThemePreference } from './types';
 import { loadSnapshot, saveSnapshot } from './storage/localStore';
 
 type DistributiveOmit<T, K extends keyof any> = T extends any ? Omit<T, K> : never;
@@ -30,6 +30,7 @@ type State = Snapshot & {
 
   // settings
   setUnit: (u: DisplayUnit) => void;
+  setTheme: (t: ThemePreference) => void;
 };
 
 const initial = loadSnapshot();
@@ -129,6 +130,13 @@ export const useStore = create<State>((set, get) => ({
   setUnit: (u) =>
     set((s) => {
       const settings = { ...s.settings, displayUnit: u };
+      saveSnapshot({ ...s, settings });
+      return { settings };
+    }),
+
+  setTheme: (t) =>
+    set((s) => {
+      const settings = { ...s.settings, theme: t };
       saveSnapshot({ ...s, settings });
       return { settings };
     }),
