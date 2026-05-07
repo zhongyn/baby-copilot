@@ -13,6 +13,12 @@ type Props = {
 
 export function NativePickerInput({ type, value, onChange, placeholder, required, ariaLabel }: Props) {
   const ref = useRef<HTMLInputElement | null>(null);
+  const showOverlayPlaceholder = (() => {
+    if (typeof navigator === 'undefined' || typeof document === 'undefined') return false;
+    const ua = navigator.userAgent || '';
+    // iPadOS 13+ can report as Mac; touch capability identifies iPad/iPhone class devices.
+    return /iPad|iPhone|iPod/.test(ua) || (ua.includes('Mac') && 'ontouchend' in document);
+  })();
 
   return (
     <div
@@ -34,7 +40,9 @@ export function NativePickerInput({ type, value, onChange, placeholder, required
         required={required}
         aria-label={ariaLabel}
       />
-      {!value && <span className="native-picker-placeholder">{placeholder}</span>}
+      {showOverlayPlaceholder && !value && (
+        <span className="native-picker-placeholder">{placeholder}</span>
+      )}
     </div>
   );
 }
