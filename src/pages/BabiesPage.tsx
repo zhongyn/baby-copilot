@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useStore } from '../store';
+import { NativePickerInput } from '../components/NativePickerInput';
 
 export function BabiesPage() {
   const babies = useStore((s) => s.babies);
@@ -23,10 +24,12 @@ export function BabiesPage() {
                 value={b.name}
                 onChange={(e) => updateBaby(b.id, { name: e.target.value })}
               />
-              <input
+              <NativePickerInput
                 type="date"
                 value={b.birthDate ?? ''}
-                onChange={(e) => updateBaby(b.id, { birthDate: e.target.value || undefined })}
+                onChange={(v) => updateBaby(b.id, { birthDate: v || undefined })}
+                placeholder="Select birth date"
+                ariaLabel="Birth date"
               />
             </div>
             <div className="baby-actions">
@@ -70,7 +73,13 @@ export function BabiesPage() {
           onChange={(e) => setName(e.target.value)}
           required
         />
-        <input type="date" value={birth} onChange={(e) => setBirth(e.target.value)} />
+        <NativePickerInput
+          type="date"
+          value={birth}
+          onChange={setBirth}
+          placeholder="Select birth date"
+          ariaLabel="Birth date"
+        />
         <button type="submit" className="primary">Add</button>
       </form>
     </section>

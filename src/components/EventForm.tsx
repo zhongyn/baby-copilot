@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react';
 import type { AppEvent, BreastSide, DiaperKind, FeedKind } from '../types';
 import { displayToMl, mlToDisplay } from '../utils/units';
 import { useStore } from '../store';
+import { NativePickerInput } from './NativePickerInput';
 
 /** Local datetime string for <input type="datetime-local"> from an ISO string. */
 function isoToLocalInput(iso: string): string {
@@ -240,22 +241,26 @@ export function EventForm({ initial, onClose }: Props) {
 
         <label className="field">
           <span>{type === 'sleep' ? 'Start' : 'Time'}</span>
-          <input
+          <NativePickerInput
             type="datetime-local"
             value={startTime}
-            onChange={(e) => setStartTime(e.target.value)}
+            onChange={setStartTime}
+            placeholder="Select date and time"
             required
+            ariaLabel={type === 'sleep' ? 'Start' : 'Time'}
           />
         </label>
 
         {type === 'sleep' && (
           <label className="field">
             <span>End</span>
-            <input
+            <NativePickerInput
               type="datetime-local"
               value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
+              onChange={setEndTime}
+              placeholder="Select date and time"
               required
+              ariaLabel="End"
             />
           </label>
         )}

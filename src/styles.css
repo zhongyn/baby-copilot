@@ -52,6 +52,28 @@ input, select, textarea {
   width: 100%;
 }
 
+.native-picker-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.native-picker-wrap > input {
+  width: 100%;
+}
+
+.native-picker-placeholder {
+  position: absolute;
+  left: 0.7rem;
+  right: 2.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* Keep native date/datetime controls inside their container across browsers. */
 input:is([type='date'], [type='datetime-local']) {
   display: block;
