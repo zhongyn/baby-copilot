@@ -8,7 +8,8 @@ const empty: Snapshot = {
   babies: [],
   events: [],
   settings: { activeBabyId: null, displayUnit: 'ml', theme: 'system' },
-  activeBreastTimer: null
+  activeBreastTimer: null,
+  activeSleepSession: null
 };
 
 export function loadSnapshot(): Snapshot {
@@ -22,7 +23,8 @@ export function loadSnapshot(): Snapshot {
       babies: parsed.babies ?? [],
       events: parsed.events ?? [],
       settings: { ...empty.settings, ...(parsed.settings ?? {}) },
-      activeBreastTimer: parsed.activeBreastTimer ?? null
+      activeBreastTimer: parsed.activeBreastTimer ?? null,
+      activeSleepSession: parsed.activeSleepSession ?? null
     };
   } catch {
     return { ...empty };

@@ -137,6 +137,42 @@ textarea { resize: vertical; }
 
 .page > h2 { margin-top: 1.25rem; }
 
+/* Today summary (Log page) */
+.today-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  padding: 0.4rem 0.6rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.today-summary-label {
+  font-weight: 600;
+  color: var(--text, inherit);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.7rem;
+}
+.today-summary-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--text, inherit);
+}
+.today-summary-icon {
+  font-size: 0.9rem;
+  line-height: 1;
+}
+.since-summary {
+  margin-top: -0.5rem;
+}
+
 /* Tiles */
 .tile-grid {
   display: grid;
@@ -170,6 +206,46 @@ textarea { resize: vertical; }
 .tile-feed { background: var(--feed); }
 .tile-diaper { background: var(--diaper); }
 .tile-sleep { background: var(--sleep); }
+
+.tile-active {
+  box-shadow: 0 0 0 3px rgba(124, 109, 184, 0.35);
+  border-color: var(--accent-strong, #7c6db8);
+}
+.tile-disabled {
+  opacity: 0.55;
+}
+
+/* Sleep session panel */
+.sleep-panel {
+  background: var(--sleep);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+.sleep-panel.running {
+  box-shadow: 0 0 0 3px rgba(124, 109, 184, 0.2);
+}
+.sleep-panel-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+.sleep-panel-icon { font-size: 1.4rem; }
+.sleep-panel-title {
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+}
+.sleep-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.sleep-actions .primary { flex: 1 1 auto; }
 
 /* Breast feeding panel */
 .breast-panel {

@@ -64,10 +64,16 @@ export type ActiveBreastTimer = {
   targetMin?: number;
 };
 
+export type ActiveSleepSession = {
+  babyId: ID;
+  startTime: string; // ISO
+};
+
 export type Snapshot = {
   schemaVersion: number;
   babies: Baby[];
   events: AppEvent[];
   settings: Settings;
   activeBreastTimer: ActiveBreastTimer | null;
+  activeSleepSession: ActiveSleepSession | null;
 };

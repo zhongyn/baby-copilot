@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { v4 as uuid } from 'uuid';
-import type { AppEvent, Baby, BreastSide, DisplayUnit, FeedEvent, ID, Snapshot, ThemePreference } from './types';
+import type { AppEvent, Baby, BreastSide, DisplayUnit, FeedEvent, ID, SleepEvent, Snapshot, ThemePreference } from './types';
 import { loadSnapshot, saveSnapshot } from './storage/localStore';
 
 type DistributiveOmit<T, K extends keyof any> = T extends any ? Omit<T, K> : never;
@@ -27,6 +27,11 @@ type State = Snapshot & {
   stopBreastTimer: () => FeedEvent | null;
   cancelBreastTimer: () => void;
   logBreastPreset: (side: BreastSide, minutes: number) => FeedEvent | null;
+
+  // sleep session
+  startSleep: () => boolean;
+  stopSleep: () => SleepEvent | null;
+  cancelSleep: () => void;
 
   // settings
   setUnit: (u: DisplayUnit) => void;
@@ -206,5 +211,42 @@ export const useStore = create<State>((set, get) => ({
       return { events };
     });
     return event;
-  }
+  },
+
+  startSleep: () => {
+    const state = get();
+    const babyId = state.settings.activeBabyId;
+    if (!babyId || state.activeSleepSession) return false;
+    const session = { babyId, startTime: new Date().toISOString() };
+    set((s) => {
+      saveSnapshot({ ...s, activeSleepSession: session });
+      return { activeSleepSession: session };
+    });
+    return true;
+  },
+
+  stopSleep: () => {
+    const state = get();
+    const sess = state.activeSleepSession;
+    if (!sess) return null;
+    const event: SleepEvent = {
+      id: uuid(),
+      babyId: sess.babyId,
+      type: 'sleep',
+      startTime: sess.startTime,
+      endTime: new Date().toISOString()
+    };
+    set((s) => {
+      const events = [...s.events, event];
+      saveSnapshot({ ...s, events, activeSleepSession: null });
+      return { events, activeSleepSession: null };
+    });
+    return event;
+  },
+
+  cancelSleep: () =>
+    set((s) => {
+      saveSnapshot({ ...s, activeSleepSession: null });
+      return { activeSleepSession: null };
+    })
 }));
