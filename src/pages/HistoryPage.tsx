@@ -11,6 +11,7 @@ import {
   formatTime
 } from '../utils/format';
 import { EventForm } from '../components/EventForm';
+import { SwipeRow } from '../components/SwipeRow';
 
 const TYPES: { id: EventType; label: string }[] = [
   { id: 'feed', label: 'Feed' },
@@ -132,32 +133,52 @@ export function HistoryPage() {
               const icon = isWake ? '🌅' : eventIcon(e);
               const title = isWake ? 'Wake up' : eventTitle(e);
               const summary = isWake ? '' : eventSummary(e, unit);
+              const onDelete = () => {
+                const msg = isWake
+                  ? 'Delete the sleep session this wake-up belongs to?'
+                  : 'Delete this event?';
+                if (confirm(msg)) deleteEvent(e.id);
+              };
               return (
-                <li key={`${e.id}:${r.kind}`} className="event-row">
-                  <span className="event-icon">{icon}</span>
-                  <div className="event-main">
-                    <div className="event-title">{title}</div>
-                    <div className="event-sub">
-                      {formatTime(r.time)}
-                      {summary && <> • {summary}</>}
+                <li key={`${e.id}:${r.kind}`} className="event-li">
+                  <SwipeRow
+                    actions={
+                      <>
+                        <button
+                          type="button"
+                          className="swipe-action edit"
+                          onClick={() => setEditing(e)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          className="swipe-action danger"
+                          onClick={onDelete}
+                        >
+                          Delete
+                        </button>
+                      </>
+                    }
+                  >
+                    <div className="event-row">
+                      <span className="event-icon">{icon}</span>
+                      <div className="event-main">
+                        <div className="event-title">{title}</div>
+                        <div className="event-sub">
+                          {formatTime(r.time)}
+                          {summary && <> • {summary}</>}
+                        </div>
+                        {!isWake && e.notes && <div className="event-notes">{e.notes}</div>}
+                      </div>
+                      <div className="event-actions event-actions-desktop">
+                        <button type="button" onClick={() => setEditing(e)}>Edit</button>
+                        <button type="button" className="danger" onClick={onDelete}>
+                          Delete
+                        </button>
+                      </div>
                     </div>
-                    {!isWake && e.notes && <div className="event-notes">{e.notes}</div>}
-                  </div>
-                  <div className="event-actions">
-                    <button type="button" onClick={() => setEditing(e)}>Edit</button>
-                    <button
-                      type="button"
-                      className="danger"
-                      onClick={() => {
-                        const msg = isWake
-                          ? 'Delete the sleep session this wake-up belongs to?'
-                          : 'Delete this event?';
-                        if (confirm(msg)) deleteEvent(e.id);
-                      }}
-                    >
-                      Delete
-                    </button>
-                  </div>
+                  </SwipeRow>
                 </li>
               );
             })}

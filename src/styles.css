@@ -525,6 +525,53 @@ textarea { resize: vertical; }
 }
 .event-actions .danger { color: var(--danger); }
 
+/* Swipe-to-reveal rows (mobile) */
+.event-li { list-style: none; }
+.swipe-row {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  /* Hint to the browser to prefer vertical scrolling; horizontal pans are handled by JS. */
+  touch-action: pan-y;
+}
+.swipe-row-actions {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  align-items: stretch;
+  z-index: 0;
+}
+.swipe-action {
+  flex: 1;
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.swipe-action.edit { background: var(--accent-strong); }
+.swipe-action.danger { background: var(--danger); color: #fff; }
+.swipe-row-surface {
+  position: relative;
+  z-index: 1;
+  will-change: transform;
+}
+
+/* On touch / coarse pointers, hide the inline desktop buttons and rely on swipe. */
+@media (hover: none) and (pointer: coarse) {
+  .event-actions-desktop { display: none; }
+}
+@media (hover: hover) and (pointer: fine) {
+  /* Desktop: keep buttons visible, no need for swipe to do anything visible. */
+  .swipe-row-actions { display: none; }
+  .swipe-row-surface { transform: none !important; }
+}
+
 .empty {
   text-align: center;
   color: var(--muted);
