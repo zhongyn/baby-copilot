@@ -17,11 +17,20 @@ export function loadSnapshot(): Snapshot {
     const raw = localStorage.getItem(KEY);
     if (!raw) return { ...empty };
     const parsed = JSON.parse(raw) as Snapshot;
-    // Future migrations would inspect parsed.schemaVersion here.
+    // Migrate legacy bottle feed kinds ('pumped' | 'formula') -> 'bottle'.
+    const events = (parsed.events ?? []).map((e) => {
+      if (e.type === 'feed') {
+        const fk = (e as { feedKind?: string }).feedKind;
+        if (fk === 'pumped' || fk === 'formula') {
+          return { ...e, feedKind: 'bottle' } as typeof e;
+        }
+      }
+      return e;
+    });
     return {
       schemaVersion: SCHEMA_VERSION,
       babies: parsed.babies ?? [],
-      events: parsed.events ?? [],
+      events,
       settings: { ...empty.settings, ...(parsed.settings ?? {}) },
       activeBreastTimer: parsed.activeBreastTimer ?? null,
       activeSleepSession: parsed.activeSleepSession ?? null

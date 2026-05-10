@@ -6,7 +6,7 @@ export type Baby = {
   birthDate?: string; // ISO date
 };
 
-export type FeedKind = 'breast' | 'pumped' | 'formula';
+export type FeedKind = 'breast' | 'bottle';
 export type BreastSide = 'left' | 'right' | 'both';
 export type DiaperKind = 'pee' | 'poo' | 'both';
 
@@ -29,7 +29,7 @@ export interface BreastFeedEvent extends EventBase {
 
 export interface BottleFeedEvent extends EventBase {
   type: 'feed';
-  feedKind: 'pumped' | 'formula';
+  feedKind: 'bottle';
   volumeMl: number;
 }
 

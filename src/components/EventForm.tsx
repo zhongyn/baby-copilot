@@ -151,7 +151,7 @@ export function EventForm({ initial, onClose }: Props) {
 
   const title =
     (isEdit ? 'Edit ' : 'Log ') +
-    (type === 'sleep' ? 'sleep' : type === 'diaper' ? 'diaper' : feedKind === 'breast' ? 'breast feed' : feedKind === 'pumped' ? 'pumped milk' : 'formula');
+    (type === 'sleep' ? 'sleep' : type === 'diaper' ? 'diaper' : feedKind === 'breast' ? 'breast feed' : 'bottle');
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
@@ -163,7 +163,7 @@ export function EventForm({ initial, onClose }: Props) {
             <label className="field">
               <span>Type</span>
               <div className="seg">
-                {(['breast', 'pumped', 'formula'] as FeedKind[]).map((k) => (
+                {(['breast', 'bottle'] as FeedKind[]).map((k) => (
                   <button
                     key={k}
                     type="button"

@@ -24,18 +24,33 @@ export function HistoryPage() {
   const [filters, setFilters] = useState<Set<EventType>>(new Set(['feed', 'diaper', 'sleep']));
   const [editing, setEditing] = useState<AppEvent | null>(null);
 
-  const filtered = useMemo(() => events.filter((e) => filters.has(e.type)), [events, filters]);
+  type Row =
+    | { kind: 'event'; event: AppEvent; time: string }
+    | { kind: 'wake'; event: AppEvent; time: string };
+
+  const rows = useMemo<Row[]>(() => {
+    const out: Row[] = [];
+    for (const e of events) {
+      if (!filters.has(e.type)) continue;
+      out.push({ kind: 'event', event: e, time: e.startTime });
+      if (e.type === 'sleep') {
+        out.push({ kind: 'wake', event: e, time: e.endTime });
+      }
+    }
+    out.sort((a, b) => b.time.localeCompare(a.time));
+    return out;
+  }, [events, filters]);
 
   const groups = useMemo(() => {
-    const m = new Map<string, AppEvent[]>();
-    for (const e of filtered) {
-      const k = dayKey(e.startTime);
+    const m = new Map<string, Row[]>();
+    for (const r of rows) {
+      const k = dayKey(r.time);
       const arr = m.get(k);
-      if (arr) arr.push(e);
-      else m.set(k, [e]);
+      if (arr) arr.push(r);
+      else m.set(k, [r]);
     }
     return Array.from(m.entries());
-  }, [filtered]);
+  }, [rows]);
 
   const toggle = (t: EventType) =>
     setFilters((s) => {
@@ -64,33 +79,43 @@ export function HistoryPage() {
 
       {groups.map(([day, items]) => (
         <div key={day} className="day-group">
-          <h3 className="day-header">{formatDateHeader(items[0].startTime)}</h3>
+          <h3 className="day-header">{formatDateHeader(items[0].time)}</h3>
           <ul className="event-list">
-            {items.map((e) => (
-              <li key={e.id} className="event-row">
-                <span className="event-icon">{eventIcon(e)}</span>
-                <div className="event-main">
-                  <div className="event-title">{eventTitle(e)}</div>
-                  <div className="event-sub">
-                    {formatTime(e.startTime)}
-                    {eventSummary(e, unit) && <> • {eventSummary(e, unit)}</>}
+            {items.map((r) => {
+              const e = r.event;
+              const isWake = r.kind === 'wake';
+              const icon = isWake ? '🌅' : eventIcon(e);
+              const title = isWake ? 'Wake up' : eventTitle(e);
+              const summary = isWake ? '' : eventSummary(e, unit);
+              return (
+                <li key={`${e.id}:${r.kind}`} className="event-row">
+                  <span className="event-icon">{icon}</span>
+                  <div className="event-main">
+                    <div className="event-title">{title}</div>
+                    <div className="event-sub">
+                      {formatTime(r.time)}
+                      {summary && <> • {summary}</>}
+                    </div>
+                    {!isWake && e.notes && <div className="event-notes">{e.notes}</div>}
                   </div>
-                  {e.notes && <div className="event-notes">{e.notes}</div>}
-                </div>
-                <div className="event-actions">
-                  <button type="button" onClick={() => setEditing(e)}>Edit</button>
-                  <button
-                    type="button"
-                    className="danger"
-                    onClick={() => {
-                      if (confirm('Delete this event?')) deleteEvent(e.id);
-                    }}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </li>
-            ))}
+                  <div className="event-actions">
+                    <button type="button" onClick={() => setEditing(e)}>Edit</button>
+                    <button
+                      type="button"
+                      className="danger"
+                      onClick={() => {
+                        const msg = isWake
+                          ? 'Delete the sleep session this wake-up belongs to?'
+                          : 'Delete this event?';
+                        if (confirm(msg)) deleteEvent(e.id);
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         </div>
       ))}

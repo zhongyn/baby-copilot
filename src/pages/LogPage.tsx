@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { differenceInMinutes } from 'date-fns';
+import { differenceInMinutes, format } from 'date-fns';
 import { EventForm, type EventFormInitial } from '../components/EventForm';
 import { BreastFeedingPanel } from '../components/BreastFeedingPanel';
 import { useToast } from '../components/Toast';
@@ -144,16 +144,10 @@ export function LogPage() {
 
   const tiles: Tile[] = [
     {
-      label: 'Pumped',
+      label: 'Bottle',
       emoji: '🍼',
       className: 'tile-feed',
-      formInitial: { mode: 'create', type: 'feed', feedKind: 'pumped' }
-    },
-    {
-      label: 'Formula',
-      emoji: '🥛',
-      className: 'tile-feed',
-      formInitial: { mode: 'create', type: 'feed', feedKind: 'formula' }
+      formInitial: { mode: 'create', type: 'feed', feedKind: 'bottle' }
     },
     {
       label: 'Pee',
@@ -194,7 +188,9 @@ export function LogPage() {
   return (
     <section className="page log-page">
       <div className="today-summary" aria-label="Today summary">
-        <span className="today-summary-label">Today total</span>
+        <span className="today-summary-label">
+          Today total <span className="today-summary-date">· {format(new Date(), 'EEE, MMM d')}</span>
+        </span>
         <span className="today-summary-item" title="Bottle milk today">
           <span className="today-summary-icon">🍼</span>
           {formatVolume(todaySummary.milkMl, unit)}
@@ -234,9 +230,9 @@ export function LogPage() {
           <span className="today-summary-icon">💩</span>
           {formatSince(lastTimes.poo, nowMs)}
         </span>
-        <span className="today-summary-item" title="Time since last wake">
-          <span className="today-summary-icon">😴</span>
-          {sleepSession ? 'now' : formatSince(lastTimes.sleep, nowMs)}
+        <span className="today-summary-item" title="Time since last wake up">
+          <span className="today-summary-icon">🌅</span>
+          {sleepSession ? 'sleeping' : formatSince(lastTimes.sleep, nowMs)}
         </span>
       </div>
       <BreastFeedingPanel />

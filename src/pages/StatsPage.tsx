@@ -58,12 +58,12 @@ export function StatsPage() {
   const lastSleep = lastEventOfType(events, (e) => e.type === 'sleep');
 
   const chartData = useMemo(() => {
-    const buckets: Record<string, { day: string; breast: number; pumped: number; formula: number; pee: number; poo: number; sleepHr: number }> = {};
+    const buckets: Record<string, { day: string; breast: number; bottle: number; pee: number; poo: number; sleepHr: number }> = {};
     const start = startOfDay(subDays(new Date(), days - 1));
     for (let i = 0; i < days; i++) {
       const d = startOfDay(subDays(new Date(), days - 1 - i));
       const k = format(d, 'yyyy-MM-dd');
-      buckets[k] = { day: format(d, 'MMM d'), breast: 0, pumped: 0, formula: 0, pee: 0, poo: 0, sleepHr: 0 };
+      buckets[k] = { day: format(d, 'MMM d'), breast: 0, bottle: 0, pee: 0, poo: 0, sleepHr: 0 };
     }
     for (const e of events) {
       const d = startOfDay(new Date(e.startTime));
@@ -74,9 +74,7 @@ export function StatsPage() {
       if (e.type === 'feed') {
         if (e.feedKind === 'breast') b.breast += 1; // count sessions for breast
         else {
-          const v = mlToDisplay(e.volumeMl, unit);
-          if (e.feedKind === 'pumped') b.pumped += v;
-          else b.formula += v;
+          b.bottle += mlToDisplay(e.volumeMl, unit);
         }
       } else if (e.type === 'diaper') {
         if (e.diaperKind === 'pee' || e.diaperKind === 'both') b.pee += 1;
@@ -87,8 +85,7 @@ export function StatsPage() {
     }
     return Object.values(buckets).map((b) => ({
       ...b,
-      pumped: Math.round(b.pumped * 100) / 100,
-      formula: Math.round(b.formula * 100) / 100,
+      bottle: Math.round(b.bottle * 100) / 100,
       sleepHr: Math.round(b.sleepHr * 10) / 10
     }));
   }, [events, days, unit]);
@@ -154,8 +151,7 @@ export function StatsPage() {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="pumped" stackId="a" fill="#7cb7e8" />
-            <Bar dataKey="formula" stackId="a" fill="#e8a87c" />
+            <Bar dataKey="bottle" fill="#7cb7e8" />
           </BarChart>
         </ResponsiveContainer>
       </div>

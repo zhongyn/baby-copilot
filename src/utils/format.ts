@@ -6,8 +6,7 @@ export function eventTitle(e: AppEvent): string {
   switch (e.type) {
     case 'feed':
       if (e.feedKind === 'breast') return 'Breast feeding';
-      if (e.feedKind === 'pumped') return 'Pumped milk';
-      return 'Formula milk';
+      return 'Bottle';
     case 'diaper':
       if (e.diaperKind === 'pee') return 'Pee';
       if (e.diaperKind === 'poo') return 'Poo';
@@ -51,7 +50,7 @@ export function relativeFromNow(iso: string): string {
 export function eventIcon(e: AppEvent): string {
   switch (e.type) {
     case 'feed':
-      return e.feedKind === 'breast' ? '🤱' : e.feedKind === 'pumped' ? '🍼' : '🥛';
+      return e.feedKind === 'breast' ? '🥱' : '🍼';
     case 'diaper':
       return e.diaperKind === 'pee' ? '💧' : e.diaperKind === 'poo' ? '💩' : '💧💩';
     case 'sleep':
