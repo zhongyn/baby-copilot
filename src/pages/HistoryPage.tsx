@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { addDays, format, isSameDay, isToday } from 'date-fns';
 import { useStore } from '../store';
 import type { AppEvent, EventType } from '../types';
 import {
@@ -17,40 +18,42 @@ const TYPES: { id: EventType; label: string }[] = [
   { id: 'sleep', label: 'Sleep' }
 ];
 
+function dateInputValue(d: Date): string {
+  return format(d, 'yyyy-MM-dd');
+}
+
+function parseDateInput(v: string): Date {
+  const [y, m, d] = v.split('-').map(Number);
+  return new Date(y, (m ?? 1) - 1, d ?? 1);
+}
+
 export function HistoryPage() {
   const events = useStore((s) => s.babyEvents());
   const unit = useStore((s) => s.settings.displayUnit);
   const deleteEvent = useStore((s) => s.deleteEvent);
   const [filters, setFilters] = useState<Set<EventType>>(new Set(['feed', 'diaper', 'sleep']));
   const [editing, setEditing] = useState<AppEvent | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date>(() => new Date());
 
   type Row =
     | { kind: 'event'; event: AppEvent; time: string }
     | { kind: 'wake'; event: AppEvent; time: string };
 
-  const rows = useMemo<Row[]>(() => {
+  const dayRows = useMemo<Row[]>(() => {
     const out: Row[] = [];
+    const selKey = dayKey(selectedDate.toISOString());
     for (const e of events) {
       if (!filters.has(e.type)) continue;
-      out.push({ kind: 'event', event: e, time: e.startTime });
-      if (e.type === 'sleep') {
+      if (dayKey(e.startTime) === selKey) {
+        out.push({ kind: 'event', event: e, time: e.startTime });
+      }
+      if (e.type === 'sleep' && dayKey(e.endTime) === selKey) {
         out.push({ kind: 'wake', event: e, time: e.endTime });
       }
     }
     out.sort((a, b) => b.time.localeCompare(a.time));
     return out;
-  }, [events, filters]);
-
-  const groups = useMemo(() => {
-    const m = new Map<string, Row[]>();
-    for (const r of rows) {
-      const k = dayKey(r.time);
-      const arr = m.get(k);
-      if (arr) arr.push(r);
-      else m.set(k, [r]);
-    }
-    return Array.from(m.entries());
-  }, [rows]);
+  }, [events, filters, selectedDate]);
 
   const toggle = (t: EventType) =>
     setFilters((s) => {
@@ -60,8 +63,45 @@ export function HistoryPage() {
       return next;
     });
 
+  const goPrev = () => setSelectedDate((d) => addDays(d, -1));
+  const goNext = () => setSelectedDate((d) => addDays(d, 1));
+  const goToday = () => setSelectedDate(new Date());
+  const isOnToday = isToday(selectedDate);
+
   return (
     <section className="page history-page">
+      <div className="date-nav">
+        <button type="button" className="date-nav-btn" onClick={goPrev} aria-label="Previous day">
+          ‹
+        </button>
+        <label className="date-nav-current">
+          <span className="date-nav-label">{formatDateHeader(selectedDate.toISOString())}</span>
+          <input
+            type="date"
+            value={dateInputValue(selectedDate)}
+            max={dateInputValue(new Date())}
+            onChange={(e) => {
+              if (e.target.value) setSelectedDate(parseDateInput(e.target.value));
+            }}
+            aria-label="Pick date"
+          />
+        </label>
+        <button
+          type="button"
+          className="date-nav-btn"
+          onClick={goNext}
+          disabled={isOnToday}
+          aria-label="Next day"
+        >
+          ›
+        </button>
+        {!isOnToday && (
+          <button type="button" className="chip date-nav-today" onClick={goToday}>
+            Today
+          </button>
+        )}
+      </div>
+
       <div className="filter-row">
         {TYPES.map((t) => (
           <button
@@ -75,13 +115,18 @@ export function HistoryPage() {
         ))}
       </div>
 
-      {groups.length === 0 && <p className="empty">No events yet. Log one from the Log tab.</p>}
+      {dayRows.length === 0 && (
+        <p className="empty">
+          {isSameDay(selectedDate, new Date())
+            ? 'No events today yet.'
+            : 'No events on this day.'}
+        </p>
+      )}
 
-      {groups.map(([day, items]) => (
-        <div key={day} className="day-group">
-          <h3 className="day-header">{formatDateHeader(items[0].time)}</h3>
+      {dayRows.length > 0 && (
+        <div className="day-group">
           <ul className="event-list">
-            {items.map((r) => {
+            {dayRows.map((r) => {
               const e = r.event;
               const isWake = r.kind === 'wake';
               const icon = isWake ? '🌅' : eventIcon(e);
@@ -118,7 +163,7 @@ export function HistoryPage() {
             })}
           </ul>
         </div>
-      ))}
+      )}
 
       {editing && (
         <EventForm initial={{ mode: 'edit', event: editing }} onClose={() => setEditing(null)} />
