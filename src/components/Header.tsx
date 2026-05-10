@@ -29,7 +29,6 @@ export function Header() {
         <NavLink to="/" end>Log</NavLink>
         <NavLink to="/history">History</NavLink>
         <NavLink to="/stats">Stats</NavLink>
-        <NavLink to="/babies">Babies</NavLink>
         <NavLink to="/settings">Settings</NavLink>
       </nav>
     </header>
